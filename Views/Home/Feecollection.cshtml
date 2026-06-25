@@ -1,0 +1,336 @@
+﻿
+@{
+    ViewData["Title"] = "Feecollection";
+    Layout = "~/Views/Shared/_Layoutall.cshtml";
+}
+
+
+<div class="content">
+    <div class="page-grid">
+
+        <div class="card">
+            <div class="card-head">
+                <h2>New fee payment</h2>
+                <span class="meta">Fields marked <span style="color:var(--margin-red)">*</span> are required</span>
+            </div>
+
+            <form id="fee-form" novalidate>
+
+                <div class="form-section">
+                    <p class="form-section-title">Student details</p>
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="admission-no">Admission no. <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <input type="text" id="admission-no" class="mono" placeholder="GFS-2026-00231" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="student-name">Student name <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <input type="text" id="student-name" placeholder="Full name" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="class-select">Class <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <select id="class-select" required>
+                                    <option value="" disabled selected>Select class</option>
+                                    <option>Class 6</option>
+                                    <option>Class 7</option>
+                                    <option>Class 8</option>
+                                    <option>Class 9</option>
+                                    <option>Class 10</option>
+                                    <option>Class 11</option>
+                                    <option>Class 12</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="section-select">Section <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <select id="section-select" required>
+                                    <option value="" disabled selected>Select section</option>
+                                    <option>A</option>
+                                    <option>B</option>
+                                    <option>C</option>
+                                    <option>D</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <p class="form-section-title">Fee details</p>
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="fee-head">Fee head <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <select id="fee-head" required>
+                                    <option value="" disabled selected>Select fee head</option>
+                                    <option>Tuition fee</option>
+                                    <option>Transport fee</option>
+                                    <option>Library fee</option>
+                                    <option>Examination fee</option>
+                                    <option>Hostel fee</option>
+                                    <option>Miscellaneous</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="term-select">Term / month <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <select id="term-select" required>
+                                    <option value="" disabled selected>Select term</option>
+                                    <option>Term 1</option>
+                                    <option>Term 2</option>
+                                    <option>Term 3</option>
+                                    <option>Annual</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="due-amount">Due amount <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <span class="prefix">₹</span>
+                                <input type="number" id="due-amount" class="mono has-prefix" placeholder="0" min="0" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="discount">Discount / concession</label>
+                            <div class="input-wrap">
+                                <span class="prefix">₹</span>
+                                <input type="number" id="discount" class="mono has-prefix" placeholder="0" min="0" value="0">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="late-fee">Late fee</label>
+                            <div class="input-wrap">
+                                <span class="prefix">₹</span>
+                                <input type="number" id="late-fee" class="mono has-prefix" placeholder="0" min="0" value="0">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>Amount payable</label>
+                            <div class="computed-box">
+                                <span class="lbl">Total payable</span>
+                                <span class="amt" id="computed-amount">₹0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <p class="form-section-title">Payment details</p>
+                    <div class="form-grid">
+                        <div class="field full">
+                            <label>Payment mode <span class="req">*</span></label>
+                            <div class="segmented" id="payment-mode" role="tablist">
+                                <div class="segmented-option active" data-mode="Cash" role="tab" aria-selected="true" tabindex="0">Cash</div>
+                                <div class="segmented-option" data-mode="UPI" role="tab" aria-selected="false" tabindex="-1">UPI</div>
+                                <div class="segmented-option" data-mode="Card" role="tab" aria-selected="false" tabindex="-1">Card</div>
+                                <div class="segmented-option" data-mode="Cheque" role="tab" aria-selected="false" tabindex="-1">Cheque</div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="ref-no">Transaction / reference no.</label>
+                            <div class="input-wrap">
+                                <input type="text" id="ref-no" class="mono" placeholder="Optional for cash">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="pay-date">Payment date <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <input type="date" id="pay-date" required>
+                            </div>
+                        </div>
+                        <div class="field full">
+                            <label for="remarks">Remarks</label>
+                            <div class="input-wrap">
+                                <textarea id="remarks" placeholder="Any notes about this payment…"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status" id="form-status" role="alert"></div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Collect fee &amp; generate receipt</button>
+                    <button type="reset" class="btn btn-secondary" id="reset-btn">Reset form</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-head">
+                <h2>Recent fee collections</h2>
+                <span class="meta" id="row-count">5 records</span>
+            </div>
+            <div class="table-scroll">
+                <table class="responsive-stack" id="collections-table">
+                    <thead>
+                        <tr>
+                            <th>Receipt no.</th>
+                            <th>Student</th>
+                            <th>Class</th>
+                            <th>Fee head</th>
+                            <th class="num">Amount</th>
+                            <th>Mode</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="collections-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll(".menu-item[data-target]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var sub = document.getElementById(btn.dataset.target);
+        var isOpen = sub.classList.contains("open");
+        sub.classList.toggle("open", !isOpen);
+        btn.setAttribute("aria-expanded", String(!isOpen));
+        btn.classList.toggle("active-parent", !isOpen);
+      });
+    });
+
+    var hamburger = document.getElementById("hamburger");
+    var sidebar = document.getElementById("sidebar");
+    var overlay = document.getElementById("overlay");
+    function closeSidebar(){ sidebar.classList.remove("open"); overlay.classList.remove("show"); }
+    hamburger.addEventListener("click", function(){
+      sidebar.classList.toggle("open");
+      overlay.classList.toggle("show");
+    });
+    overlay.addEventListener("click", closeSidebar);
+
+    document.getElementById("topbar-date").textContent = new Date().toLocaleDateString("en-IN", { weekday:"long", day:"numeric", month:"long", year:"numeric" });
+    document.getElementById("pay-date").valueAsDate = new Date();
+
+    function fmt(n){ return "₹" + Math.max(0, Math.round(n)).toLocaleString("en-IN"); }
+
+    var dueInput = document.getElementById("due-amount");
+    var discInput = document.getElementById("discount");
+    var lateInput = document.getElementById("late-fee");
+    var computedEl = document.getElementById("computed-amount");
+
+    function recompute(){
+      var due = parseFloat(dueInput.value) || 0;
+      var disc = parseFloat(discInput.value) || 0;
+      var late = parseFloat(lateInput.value) || 0;
+      var total = due - disc + late;
+      computedEl.textContent = fmt(total);
+      return total;
+    }
+    [dueInput, discInput, lateInput].forEach(function(el){ el.addEventListener("input", recompute); });
+
+    var selectedMode = "Cash";
+    document.querySelectorAll("#payment-mode .segmented-option").forEach(function(opt){
+      opt.addEventListener("click", function(){
+        document.querySelectorAll("#payment-mode .segmented-option").forEach(function(o){
+          o.classList.remove("active"); o.setAttribute("aria-selected","false"); o.setAttribute("tabindex","-1");
+        });
+        opt.classList.add("active");
+        opt.setAttribute("aria-selected","true");
+        opt.setAttribute("tabindex","0");
+        selectedMode = opt.dataset.mode;
+      });
+      opt.addEventListener("keydown", function(e){
+        if(e.key === "Enter" || e.key === " "){ e.preventDefault(); opt.click(); }
+      });
+    });
+
+    var collectionsBody = document.getElementById("collections-body");
+    var rowCount = document.getElementById("row-count");
+    var receiptSeed = 20261050;
+
+    function addRow(rec, animate){
+      var tr = document.createElement("tr");
+      if(animate){ tr.style.background = "rgba(200,160,50,0.12)"; }
+      tr.innerHTML =
+        '<td data-label="Receipt no." style="font-family:\'JetBrains Mono\',monospace; font-size:12px;">' + rec.receipt + '</td>' +
+        '<td data-label="Student">' + rec.name + '</td>' +
+        '<td data-label="Class">' + rec.cls + '</td>' +
+        '<td data-label="Fee head">' + rec.head + '</td>' +
+        '<td data-label="Amount" class="num">' + fmt(rec.amount) + '</td>' +
+        '<td data-label="Mode">' + rec.mode + '</td>' +
+        '<td data-label="Date">' + rec.date + '</td>' +
+        '<td data-label="Status"><span class="badge paid">Paid</span></td>';
+      collectionsBody.insertBefore(tr, collectionsBody.firstChild);
+      if(animate){
+        setTimeout(function(){ tr.style.transition = "background 0.6s"; tr.style.background = ""; }, 50);
+      }
+    }
+
+    var seedData = [
+      { receipt:"RCT-20261049", name:"Aarav Mehta",   cls:"10-B", head:"Tuition fee",      amount:24500, mode:"UPI",    date:"23 Jun 2026" },
+      { receipt:"RCT-20261048", name:"Sneha Kapoor",  cls:"8-A",  head:"Transport fee",    amount:8000,  mode:"Cash",   date:"23 Jun 2026" },
+      { receipt:"RCT-20261046", name:"Rohan Verma",   cls:"12-C", head:"Examination fee",  amount:3200,  mode:"Card",   date:"22 Jun 2026" },
+      { receipt:"RCT-20261044", name:"Ishita Sharma", cls:"6-D",  head:"Tuition fee",      amount:15750, mode:"Cheque", date:"21 Jun 2026" },
+      { receipt:"RCT-20261041", name:"Kabir Singh",   cls:"9-A",  head:"Library fee",      amount:1200,  mode:"UPI",    date:"20 Jun 2026" }
+    ];
+    seedData.forEach(function(rec){ addRow(rec, false); });
+
+    var form = document.getElementById("fee-form");
+    var status = document.getElementById("form-status");
+
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      var requiredIds = ["admission-no","student-name","class-select","section-select","fee-head","term-select","due-amount","pay-date"];
+      var missing = requiredIds.some(function(id){ return !document.getElementById(id).value; });
+
+      if(missing){
+        status.textContent = "Please fill all required fields before collecting the fee.";
+        status.classList.remove("success");
+        status.classList.add("show","error");
+        return;
+      }
+
+      var total = recompute();
+      var name = document.getElementById("student-name").value.trim();
+      var cls = document.getElementById("class-select").value + "-" + document.getElementById("section-select").value;
+      var head = document.getElementById("fee-head").value;
+      var dateVal = document.getElementById("pay-date").value;
+      var dateObj = dateVal ? new Date(dateVal) : new Date();
+      var dateStr = dateObj.toLocaleDateString("en-IN", { day:"numeric", month:"short", year:"numeric" });
+      receiptSeed++;
+
+      addRow({
+        receipt: "RCT-" + receiptSeed,
+        name: name,
+        cls: cls,
+        head: head,
+        amount: total,
+        mode: selectedMode,
+        date: dateStr
+      }, true);
+
+      rowCount.textContent = (collectionsBody.rows.length) + " records";
+
+      status.textContent = "Fee collected successfully — receipt RCT-" + receiptSeed + " generated and added to the table below.";
+      status.classList.remove("error");
+      status.classList.add("show","success");
+
+      form.reset();
+      document.getElementById("pay-date").valueAsDate = new Date();
+      computedEl.textContent = "₹0";
+      document.querySelectorAll("#payment-mode .segmented-option").forEach(function(o){ o.classList.remove("active"); });
+      document.querySelector('#payment-mode .segmented-option[data-mode="Cash"]').classList.add("active");
+      selectedMode = "Cash";
+    });
+
+    document.getElementById("reset-btn").addEventListener("click", function(){
+      setTimeout(function(){
+        computedEl.textContent = "₹0";
+        status.classList.remove("show","success","error");
+      }, 0);
+    });
+</script>
+
