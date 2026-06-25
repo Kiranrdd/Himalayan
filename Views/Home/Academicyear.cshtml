@@ -1,0 +1,212 @@
+﻿
+@{
+    ViewData["Title"] = "Academicyear";
+    Layout = "~/Views/Shared/_Layoutall.cshtml";
+}
+<div class="content">
+    <div class="page-grid">
+
+        <div class="card">
+            <div class="card-head">
+                <h2>Add academic year</h2>
+                <span class="meta">Fields marked <span style="color:var(--margin-red)">*</span> are required</span>
+            </div>
+
+            <form id="year-form" novalidate>
+                <div class="form-section">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="year-name">Year name <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <input type="text" id="year-name" class="mono" placeholder="2026-27" maxlength="20" required>
+                            </div>
+                            <p class="field-hint">Format: YYYY-YY, e.g. 2026-27</p>
+                        </div>
+                        <div class="field">
+                            <!-- spacer to keep grid aligned -->
+                        </div>
+                        <div class="field">
+                            <label for="start-date">Start date <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <input type="date" id="start-date" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="end-date">End date <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <input type="date" id="end-date" required>
+                            </div>
+                            <p class="field-hint">Auto-filled as one year minus a day after the start date — edit if needed.</p>
+                        </div>
+                        <div class="field full">
+                            <div class="toggle-row">
+                                <input type="checkbox" id="is-active">
+                                <label for="is-active">Set as the active academic year</label>
+                            </div>
+                            <p class="field-hint">Only one academic year is active at a time. Checking this will mark all other years inactive.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status" id="form-status" role="alert"></div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Add academic year</button>
+                    <button type="reset" class="btn btn-secondary" id="reset-btn">Reset form</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-head">
+                <h2>Academic years</h2>
+                <span class="meta" id="row-count">5 records</span>
+            </div>
+            <div class="table-scroll">
+                <table class="responsive-stack" id="years-table">
+                    <thead>
+                        <tr>
+                            <th style="width:8%">ID</th>
+                            <th>Year name</th>
+                            <th>Start date</th>
+                            <th>End date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="years-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll(".menu-item[data-target]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var sub = document.getElementById(btn.dataset.target);
+        var isOpen = sub.classList.contains("open");
+        sub.classList.toggle("open", !isOpen);
+        btn.setAttribute("aria-expanded", String(!isOpen));
+        btn.classList.toggle("active-parent", !isOpen);
+      });
+    });
+
+    var hamburger = document.getElementById("hamburger");
+    var sidebar = document.getElementById("sidebar");
+    var overlay = document.getElementById("overlay");
+    function closeSidebar(){ sidebar.classList.remove("open"); overlay.classList.remove("show"); }
+    hamburger.addEventListener("click", function(){
+      sidebar.classList.toggle("open");
+      overlay.classList.toggle("show");
+    });
+    overlay.addEventListener("click", closeSidebar);
+
+    document.getElementById("topbar-date").textContent = new Date().toLocaleDateString("en-IN", { weekday:"long", day:"numeric", month:"long", year:"numeric" });
+
+    function fmtDate(iso){
+      var d = new Date(iso + "T00:00:00");
+      return d.toLocaleDateString("en-IN", { day:"numeric", month:"short", year:"numeric" });
+    }
+
+    /* ---- auto-fill end date = start date + 1 year - 1 day, unless user has edited it manually ---- */
+    var startInput = document.getElementById("start-date");
+    var endInput = document.getElementById("end-date");
+    var endTouchedManually = false;
+    endInput.addEventListener("input", function(){ endTouchedManually = true; });
+    startInput.addEventListener("change", function(){
+      if(endTouchedManually || !startInput.value) return;
+      var d = new Date(startInput.value + "T00:00:00");
+      d.setFullYear(d.getFullYear() + 1);
+      d.setDate(d.getDate() - 1);
+      var iso = d.toISOString().slice(0,10);
+      endInput.value = iso;
+    });
+
+    /* ---- table ---- */
+    var yearsBody = document.getElementById("years-body");
+    var rowCount = document.getElementById("row-count");
+    var nextId = 6;
+
+    function addRow(rec, animate){
+      var tr = document.createElement("tr");
+      tr.dataset.id = rec.id;
+      if(animate){ tr.style.background = "rgba(200,160,50,0.12)"; }
+      tr.innerHTML =
+        '<td data-label="ID" class="num" style="font-family:\'JetBrains Mono\',monospace;">' + rec.id + '</td>' +
+        '<td data-label="Year name" style="font-family:\'JetBrains Mono\',monospace; font-weight:500;">' + rec.yearName + '</td>' +
+        '<td data-label="Start date">' + rec.start + '</td>' +
+        '<td data-label="End date">' + rec.end + '</td>' +
+        '<td data-label="Status"><span class="badge ' + (rec.active ? 'paid' : 'inactive') + '">' + (rec.active ? 'Active' : 'Inactive') + '</span></td>';
+      yearsBody.insertBefore(tr, yearsBody.firstChild);
+      if(animate){
+        setTimeout(function(){ tr.style.transition = "background 0.6s"; tr.style.background = ""; }, 50);
+      }
+    }
+
+    var seedData = [
+      { id:1, yearName:"2024-25", start:fmtDate("2024-04-01"), end:fmtDate("2025-03-31"), active:true },
+      { id:2, yearName:"2025-26", start:fmtDate("2025-04-01"), end:fmtDate("2026-03-31"), active:true },
+      { id:3, yearName:"2023-24", start:fmtDate("2023-04-01"), end:fmtDate("2024-03-31"), active:false },
+      { id:4, yearName:"2026-27", start:fmtDate("2026-04-01"), end:fmtDate("2027-03-31"), active:false },
+      { id:5, yearName:"2022-23", start:fmtDate("2022-04-01"), end:fmtDate("2023-03-31"), active:false }
+    ];
+    /* Insert in the same order as the table so newest seed id ends up on top, matching the SQL insert order */
+    seedData.slice().reverse().forEach(function(rec){ addRow(rec, false); });
+
+    var form = document.getElementById("year-form");
+    var status = document.getElementById("form-status");
+
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      var yearName = document.getElementById("year-name").value.trim();
+      var startVal = startInput.value;
+      var endVal = endInput.value;
+      var isActive = document.getElementById("is-active").checked;
+
+      if(!yearName || !startVal || !endVal){
+        status.textContent = "Please fill in the year name, start date and end date.";
+        status.classList.remove("success");
+        status.classList.add("show","error");
+        return;
+      }
+      if(new Date(endVal) <= new Date(startVal)){
+        status.textContent = "End date must be after the start date.";
+        status.classList.remove("success");
+        status.classList.add("show","error");
+        return;
+      }
+
+      if(isActive){
+        yearsBody.querySelectorAll(".badge.paid").forEach(function(badge){
+          badge.classList.remove("paid"); badge.classList.add("inactive");
+          badge.textContent = "Inactive";
+        });
+      }
+
+      addRow({
+        id: nextId,
+        yearName: yearName,
+        start: fmtDate(startVal),
+        end: fmtDate(endVal),
+        active: isActive
+      }, true);
+      nextId++;
+
+      rowCount.textContent = yearsBody.rows.length + " records";
+      status.textContent = "Academic year \"" + yearName + "\" added" + (isActive ? " and set as active." : ".");
+      status.classList.remove("error");
+      status.classList.add("show","success");
+
+      form.reset();
+      endTouchedManually = false;
+    });
+
+    document.getElementById("reset-btn").addEventListener("click", function(){
+      setTimeout(function(){
+        status.classList.remove("show","success","error");
+        endTouchedManually = false;
+      }, 0);
+    });
+</script>
+

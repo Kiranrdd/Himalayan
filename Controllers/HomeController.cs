@@ -21,6 +21,22 @@ namespace Himalayan.Controllers
         {
             return View();
         }
+        public IActionResult Academicyear()
+        {
+            return View();
+        }
+        public IActionResult MClass()
+        {
+            return View();
+        }
+        public IActionResult Feeinvoice()
+        {
+            return View();
+        }
+        public IActionResult Feecollection()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

@@ -1,0 +1,111 @@
+﻿
+@{
+    ViewData["Title"] = "MClass";
+    Layout = "~/Views/Shared/_Layoutall.cshtml";
+}
+
+
+<div class="content">
+    <div class="page-grid">
+
+        <div class="card" style="max-width:560px;">
+            <div class="card-head">
+                <h2>Add class</h2>
+                <span class="meta">Fields marked <span style="color:var(--margin-red)">*</span> are required</span>
+            </div>
+
+            <form id="class-form" novalidate>
+                <div class="form-section">
+                    <div class="form-grid" style="grid-template-columns:1fr;">
+                        <div class="field">
+                            <label for="class-name">Class name <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <input type="text" id="class-name" placeholder="e.g. Nursery, KG, Class 1, Class 10" maxlength="50" required>
+                            </div>
+                            <p class="field-hint">As it should appear across the ERP — Nursery, KG, Class 1 … Class 12.</p>
+                        </div>
+
+                        <div class="field">
+                            <label for="class-numeric">Class numeric <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <input type="number" id="class-numeric" class="mono" placeholder="0" min="0" required>
+                            </div>
+                            <p class="field-hint">Numeric rank used for sorting/comparison — e.g. Nursery = 0, KG = 1, Class 10 = 10.</p>
+                        </div>
+
+                        <div class="field">
+                            <label for="sort-order">Sort order</label>
+                            <div class="input-wrap">
+                                <input type="number" id="sort-order" class="mono" placeholder="e.g. 1" min="1">
+                            </div>
+                            <p class="field-hint">Controls display order in dropdowns and lists. Leave blank to add at the end.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status" id="form-status" role="alert"></div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Add class</button>
+                    <button type="reset" class="btn btn-secondary" id="reset-btn">Reset form</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll(".menu-item[data-target]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var sub = document.getElementById(btn.dataset.target);
+        var isOpen = sub.classList.contains("open");
+        sub.classList.toggle("open", !isOpen);
+        btn.setAttribute("aria-expanded", String(!isOpen));
+        btn.classList.toggle("active-parent", !isOpen);
+      });
+    });
+
+    var hamburger = document.getElementById("hamburger");
+    var sidebar = document.getElementById("sidebar");
+    var overlay = document.getElementById("overlay");
+    function closeSidebar(){ sidebar.classList.remove("open"); overlay.classList.remove("show"); }
+    hamburger.addEventListener("click", function(){
+      sidebar.classList.toggle("open");
+      overlay.classList.toggle("show");
+    });
+    overlay.addEventListener("click", closeSidebar);
+
+    document.getElementById("topbar-date").textContent = new Date().toLocaleDateString("en-IN", { weekday:"long", day:"numeric", month:"long", year:"numeric" });
+
+    var form = document.getElementById("class-form");
+    var status = document.getElementById("form-status");
+    var addedCount = 0;
+
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      var name = document.getElementById("class-name").value.trim();
+      var numericVal = document.getElementById("class-numeric").value;
+      var sortVal = document.getElementById("sort-order").value;
+
+      if(!name || numericVal === ""){
+        status.textContent = "Please fill in the class name and class numeric value.";
+        status.classList.remove("success");
+        status.classList.add("show","error");
+        return;
+      }
+
+      addedCount++;
+      var sortText = sortVal !== "" ? sortVal : "auto (end of list)";
+      status.textContent = "Class \"" + name + "\" added — numeric: " + numericVal + ", sort order: " + sortText + ".";
+      status.classList.remove("error");
+      status.classList.add("show","success");
+
+      form.reset();
+    });
+
+    document.getElementById("reset-btn").addEventListener("click", function(){
+      setTimeout(function(){ status.classList.remove("show","success","error"); }, 0);
+    });
+</script>
+

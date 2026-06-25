@@ -1,0 +1,386 @@
+﻿
+@{
+    ViewData["Title"] = "Feeinvoice";
+    Layout = "~/Views/Shared/_Layoutall.cshtml";
+}
+
+
+
+
+<div class="content">
+    <div class="page-grid">
+
+        <div class="card">
+            <div class="card-head">
+                <h2>Generate fee invoice</h2>
+                <span class="meta">Fields marked <span style="color:var(--margin-red)">*</span> are required</span>
+            </div>
+
+            <form id="invoice-form" novalidate>
+
+                <div class="form-section">
+                    <p class="form-section-title">Generate for</p>
+                    <div class="form-grid">
+                        <div class="field full">
+                            <div class="segmented" id="gen-mode" role="tablist">
+                                <div class="segmented-option active" data-mode="bulk" role="tab" aria-selected="true" tabindex="0">By class &amp; section</div>
+                                <div class="segmented-option" data-mode="individual" role="tab" aria-selected="false" tabindex="-1">Individual student</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-grid" id="bulk-fields">
+                        <div class="field">
+                            <label for="class-select">Class <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <select id="class-select" required>
+                                    <option value="" disabled selected>Select class</option>
+                                    <option>Class 6</option>
+                                    <option>Class 7</option>
+                                    <option>Class 8</option>
+                                    <option>Class 9</option>
+                                    <option>Class 10</option>
+                                    <option>Class 11</option>
+                                    <option>Class 12</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="section-select">Section</label>
+                            <div class="input-wrap">
+                                <select id="section-select">
+                                    <option selected>All sections</option>
+                                    <option>A</option>
+                                    <option>B</option>
+                                    <option>C</option>
+                                    <option>D</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field full">
+                            <div class="computed-box">
+                                <span class="lbl" id="bulk-preview">Select a class to see how many students will receive this invoice.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-grid" id="individual-fields" style="display:none;">
+                        <div class="field">
+                            <label for="admission-no">Admission no. <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <input type="text" id="admission-no" class="mono" placeholder="GFS-2026-00231">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="student-name">Student name <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <input type="text" id="student-name" placeholder="Full name">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <p class="form-section-title">Fee details</p>
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="fee-head">Fee head <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <select id="fee-head" required>
+                                    <option value="" disabled selected>Select fee head</option>
+                                    <option>Tuition fee</option>
+                                    <option>Transport fee</option>
+                                    <option>Library fee</option>
+                                    <option>Examination fee</option>
+                                    <option>Hostel fee</option>
+                                    <option>Miscellaneous</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="term-select">Term / month <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <select id="term-select" required>
+                                    <option value="" disabled selected>Select term</option>
+                                    <option>Term 1</option>
+                                    <option>Term 2</option>
+                                    <option>Term 3</option>
+                                    <option>Annual</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="amount">Amount per student <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <span class="prefix">₹</span>
+                                <input type="number" id="amount" class="mono has-prefix" placeholder="0" min="0" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="due-date">Due date <span class="req">*</span></label>
+                            <div class="input-wrap">
+                                <input type="date" id="due-date" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="late-fee">Late fee after due date</label>
+                            <div class="input-wrap">
+                                <span class="prefix">₹</span>
+                                <input type="number" id="late-fee" class="mono has-prefix" placeholder="0" min="0" value="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <p class="form-section-title">Notes</p>
+                    <div class="form-grid">
+                        <div class="field full">
+                            <label for="remarks">Remarks (printed on invoice)</label>
+                            <div class="input-wrap">
+                                <textarea id="remarks" placeholder="Optional note for the parent or student…"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status" id="form-status" role="alert"></div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Generate invoice(s)</button>
+                    <button type="reset" class="btn btn-secondary" id="reset-btn">Reset form</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-head">
+                <h2>Generated invoices</h2>
+                <span class="meta" id="row-count">5 records</span>
+            </div>
+            <div class="table-scroll">
+                <table class="responsive-stack" id="invoices-table">
+                    <thead>
+                        <tr>
+                            <th>Invoice no.</th>
+                            <th>Student</th>
+                            <th>Class</th>
+                            <th>Fee head</th>
+                            <th class="num">Amount</th>
+                            <th>Due date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoices-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    document.querySelectorAll(".menu-item[data-target]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var sub = document.getElementById(btn.dataset.target);
+        var isOpen = sub.classList.contains("open");
+        sub.classList.toggle("open", !isOpen);
+        btn.setAttribute("aria-expanded", String(!isOpen));
+        btn.classList.toggle("active-parent", !isOpen);
+      });
+    });
+
+    var hamburger = document.getElementById("hamburger");
+    var sidebar = document.getElementById("sidebar");
+    var overlay = document.getElementById("overlay");
+    function closeSidebar(){ sidebar.classList.remove("open"); overlay.classList.remove("show"); }
+    hamburger.addEventListener("click", function(){
+      sidebar.classList.toggle("open");
+      overlay.classList.toggle("show");
+    });
+    overlay.addEventListener("click", closeSidebar);
+
+    document.getElementById("topbar-date").textContent = new Date().toLocaleDateString("en-IN", { weekday:"long", day:"numeric", month:"long", year:"numeric" });
+
+    var dueDateInput = document.getElementById("due-date");
+    var defaultDue = new Date();
+    defaultDue.setDate(defaultDue.getDate() + 7);
+    dueDateInput.valueAsDate = defaultDue;
+
+    function fmt(n){ return "₹" + Math.max(0, Math.round(n)).toLocaleString("en-IN"); }
+
+    /* ---- mode toggle: bulk vs individual ---- */
+    var genMode = "bulk";
+    var bulkFields = document.getElementById("bulk-fields");
+    var individualFields = document.getElementById("individual-fields");
+    document.querySelectorAll("#gen-mode .segmented-option").forEach(function(opt){
+      opt.addEventListener("click", function(){
+        document.querySelectorAll("#gen-mode .segmented-option").forEach(function(o){
+          o.classList.remove("active"); o.setAttribute("aria-selected","false"); o.setAttribute("tabindex","-1");
+        });
+        opt.classList.add("active");
+        opt.setAttribute("aria-selected","true");
+        opt.setAttribute("tabindex","0");
+        genMode = opt.dataset.mode;
+        bulkFields.style.display = genMode === "bulk" ? "" : "none";
+        individualFields.style.display = genMode === "individual" ? "" : "none";
+      });
+      opt.addEventListener("keydown", function(e){
+        if(e.key === "Enter" || e.key === " "){ e.preventDefault(); opt.click(); }
+      });
+    });
+
+    /* ---- mock class roster, used for bulk preview + generation ---- */
+    var classRoster = {
+      "Class 6":  ["Aditi Rao","Vivaan Joshi","Myra Shah","Kabir Nair","Anaya Gupta"],
+      "Class 7":  ["Reyansh Kulkarni","Diya Patel","Arjun Malhotra","Saanvi Iyer"],
+      "Class 8":  ["Vihaan Chatterjee","Riya Bose","Aryan Khanna","Tara Menon","Dev Saxena"],
+      "Class 9":  ["Ananya Pillai","Karan Bhatt","Ishaan Trivedi","Navya Reddy"],
+      "Class 10": ["Aarav Mehta","Sneha Kapoor","Yash Agarwal","Pooja Nanda"],
+      "Class 11": ["Rohan Verma","Meera Subramaniam","Aditya Shetty"],
+      "Class 12": ["Ishita Sharma","Kabir Singh","Tanvi Joshi","Siddharth Rao"]
+    };
+    var sectionIndex = { "A":0, "B":1, "C":2, "D":3 };
+
+    function rosterFor(cls, section){
+      var full = classRoster[cls] || [];
+      if(!section || section === "All sections") return full;
+      var idx = sectionIndex[section] || 0;
+      return full.filter(function(_, i){ return i % 4 === idx; });
+    }
+
+    var classSelect = document.getElementById("class-select");
+    var sectionSelect = document.getElementById("section-select");
+    var bulkPreview = document.getElementById("bulk-preview");
+
+    function updatePreview(){
+      var cls = classSelect.value;
+      var sec = sectionSelect.value;
+      if(!cls){
+        bulkPreview.textContent = "Select a class to see how many students will receive this invoice.";
+        return;
+      }
+      var list = rosterFor(cls, sec);
+      var secLabel = sec === "All sections" ? "all sections" : "section " + sec;
+      bulkPreview.textContent = list.length + " student" + (list.length === 1 ? "" : "s") + " in " + cls + " (" + secLabel + ") will receive this invoice.";
+    }
+    classSelect.addEventListener("change", updatePreview);
+    sectionSelect.addEventListener("change", updatePreview);
+
+    /* ---- generated invoices table ---- */
+    var invoicesBody = document.getElementById("invoices-body");
+    var rowCount = document.getElementById("row-count");
+    var invoiceSeed = 20261060;
+
+    function addRow(rec, animate){
+      var tr = document.createElement("tr");
+      if(animate){ tr.style.background = "rgba(200,160,50,0.12)"; }
+      tr.innerHTML =
+        '<td data-label="Invoice no." style="font-family:\'JetBrains Mono\',monospace; font-size:12px;">' + rec.invoice + '</td>' +
+        '<td data-label="Student">' + rec.name + '</td>' +
+        '<td data-label="Class">' + rec.cls + '</td>' +
+        '<td data-label="Fee head">' + rec.head + '</td>' +
+        '<td data-label="Amount" class="num">' + fmt(rec.amount) + '</td>' +
+        '<td data-label="Due date">' + rec.due + '</td>' +
+        '<td data-label="Status"><span class="badge pending">Unpaid</span></td>';
+      invoicesBody.insertBefore(tr, invoicesBody.firstChild);
+      if(animate){
+        setTimeout(function(){ tr.style.transition = "background 0.6s"; tr.style.background = ""; }, 50);
+      }
+    }
+
+    var seedData = [
+      { invoice:"INV-20261059", name:"Aarav Mehta",   cls:"10-B", head:"Tuition fee",     amount:24500, due:"30 Jun 2026" },
+      { invoice:"INV-20261058", name:"Sneha Kapoor",  cls:"8-A",  head:"Transport fee",   amount:8000,  due:"30 Jun 2026" },
+      { invoice:"INV-20261056", name:"Rohan Verma",   cls:"12-C", head:"Examination fee", amount:3200,  due:"28 Jun 2026" },
+      { invoice:"INV-20261054", name:"Ishita Sharma", cls:"6-D",  head:"Tuition fee",     amount:15750, due:"27 Jun 2026" },
+      { invoice:"INV-20261051", name:"Kabir Singh",   cls:"9-A",  head:"Library fee",     amount:1200,  due:"26 Jun 2026" }
+    ];
+    seedData.forEach(function(rec){ addRow(rec, false); });
+
+    var form = document.getElementById("invoice-form");
+    var status = document.getElementById("form-status");
+
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+
+      var feeHead = document.getElementById("fee-head").value;
+      var term = document.getElementById("term-select").value;
+      var amount = parseFloat(document.getElementById("amount").value) || 0;
+      var dueVal = document.getElementById("due-date").value;
+      var dueObj = dueVal ? new Date(dueVal) : defaultDue;
+      var dueStr = dueObj.toLocaleDateString("en-IN", { day:"numeric", month:"short", year:"numeric" });
+
+      if(!feeHead || !term || !amount || !dueVal){
+        status.textContent = "Please fill all required fields before generating the invoice.";
+        status.classList.remove("success");
+        status.classList.add("show","error");
+        return;
+      }
+
+      var generated = 0;
+
+      if(genMode === "bulk"){
+        var cls = classSelect.value;
+        var sec = sectionSelect.value;
+        if(!cls){
+          status.textContent = "Please select a class to generate invoices in bulk.";
+          status.classList.remove("success");
+          status.classList.add("show","error");
+          return;
+        }
+        var list = rosterFor(cls, sec);
+        var secLabel = sec === "All sections" ? cls : (cls + "-" + sec);
+        list.forEach(function(studentName){
+          invoiceSeed++;
+          addRow({
+            invoice: "INV-" + invoiceSeed,
+            name: studentName,
+            cls: secLabel,
+            head: feeHead,
+            amount: amount,
+            due: dueStr
+          }, true);
+        });
+        generated = list.length;
+        status.textContent = "Generated " + generated + " invoice" + (generated === 1 ? "" : "s") + " for " + secLabel + " — added to the table below.";
+      } else {
+        var admNo = document.getElementById("admission-no").value.trim();
+        var name = document.getElementById("student-name").value.trim();
+        if(!admNo || !name){
+          status.textContent = "Please enter the student's admission number and name.";
+          status.classList.remove("success");
+          status.classList.add("show","error");
+          return;
+        }
+        invoiceSeed++;
+        addRow({
+          invoice: "INV-" + invoiceSeed,
+          name: name,
+          cls: "—",
+          head: feeHead,
+          amount: amount,
+          due: dueStr
+        }, true);
+        generated = 1;
+        status.textContent = "Generated invoice INV-" + invoiceSeed + " for " + name + " — added to the table below.";
+      }
+
+      rowCount.textContent = invoicesBody.rows.length + " records";
+      status.classList.remove("error");
+      status.classList.add("show","success");
+
+      form.reset();
+      dueDateInput.valueAsDate = defaultDue;
+      bulkPreview.textContent = "Select a class to see how many students will receive this invoice.";
+    });
+
+    document.getElementById("reset-btn").addEventListener("click", function(){
+      setTimeout(function(){
+        status.classList.remove("show","success","error");
+        dueDateInput.valueAsDate = defaultDue;
+        bulkPreview.textContent = "Select a class to see how many students will receive this invoice.";
+      }, 0);
+    });
+</script>
