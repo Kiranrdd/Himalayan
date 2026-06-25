@@ -1,0 +1,486 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greenfield International School — ERP Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root{
+          --ink-navy:#152442;
+          --ink-navy-deep:#0F1B33;
+          --ink-navy-light:#1F3661;
+          --parchment:#F7F2E6;
+          --parchment-dim:#EFE8D8;
+          --white:#FFFFFF;
+          --brass:#C8A032;
+          --brass-deep:#9C7B1F;
+          --margin-red:#9B3B3B;
+          --text-slate:#3D4756;
+          --text-muted:#7C8696;
+          --error:#9B3B3B;
+          --radius:10px;
+        }
+        *{box-sizing:border-box;}
+        html,body{margin:0;padding:0;}
+        body{
+          font-family:'Inter',sans-serif;
+          background:var(--parchment-dim);
+          color:var(--text-slate);
+          min-height:100vh;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          padding:32px 16px;
+        }
+
+        .screen{
+          width:100%;
+          max-width:980px;
+          min-height:600px;
+          background:var(--white);
+          border-radius:var(--radius);
+          overflow:hidden;
+          display:flex;
+          box-shadow:0 1px 2px rgba(15,27,51,0.08), 0 12px 32px rgba(15,27,51,0.12);
+        }
+
+        /* ---------- LEFT: register panel ---------- */
+        .panel-left{
+          flex:0 0 42%;
+          position:relative;
+          background:var(--ink-navy);
+          background-image:
+            linear-gradient(var(--ink-navy-light) 1px, transparent 1px);
+          background-size:100% 32px;
+          background-position:0 84px;
+          padding:48px 40px 36px 56px;
+          color:var(--parchment);
+          display:flex;
+          flex-direction:column;
+          overflow:hidden;
+        }
+        .panel-left::before{
+          content:"";
+          position:absolute;
+          top:0; bottom:0; left:34px;
+          width:1px;
+          background:var(--margin-red);
+          opacity:0.55;
+        }
+        .panel-left::after{
+          content:"";
+          position:absolute;
+          inset:0;
+          background:radial-gradient(ellipse at top right, rgba(255,255,255,0.05), transparent 55%);
+          pointer-events:none;
+        }
+
+        .seal{
+          width:64px; height:64px;
+          border-radius:50%;
+          border:2px solid var(--brass);
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-family:'Fraunces',serif;
+          font-weight:600;
+          font-size:20px;
+          color:var(--brass);
+          letter-spacing:0.5px;
+          flex-shrink:0;
+          transform:translateY(-24px) rotate(-8deg) scale(0.7);
+          opacity:0;
+          animation:stampIn 0.55s 0.15s cubic-bezier(.2,.9,.3,1.2) forwards;
+        }
+        .seal::before{
+          content:"";
+          position:absolute;
+          width:78px; height:78px;
+          border:1px solid var(--brass);
+          border-radius:50%;
+          opacity:0.45;
+        }
+        @@keyframes stampIn{
+          0%{ transform:translateY(-24px) rotate(-8deg) scale(0.7); opacity:0; }
+          70%{ transform:translateY(2px) rotate(-3deg) scale(1.04); opacity:1; }
+          100%{ transform:translateY(0) rotate(-3deg) scale(1); opacity:1; }
+        }
+        @@media (prefers-reduced-motion: reduce){
+          .seal{ animation:none; opacity:1; transform:rotate(-3deg); }
+        }
+
+        .brand{
+          margin-top:28px;
+        }
+        .brand-eyebrow{
+          font-family:'JetBrains Mono',monospace;
+          font-size:11px;
+          letter-spacing:0.12em;
+          text-transform:uppercase;
+          color:var(--brass);
+          margin:0 0 10px;
+        }
+        .brand-name{
+          font-family:'Fraunces',serif;
+          font-weight:500;
+          font-size:30px;
+          line-height:1.18;
+          margin:0;
+          color:var(--white);
+        }
+        .brand-sub{
+          font-family:'Fraunces',serif;
+          font-style:italic;
+          font-weight:400;
+          font-size:16px;
+          color:var(--parchment);
+          opacity:0.75;
+          margin:14px 0 0;
+        }
+
+        .panel-left-spacer{ flex:1 1 auto; }
+
+        .register-line{
+          display:flex;
+          justify-content:space-between;
+          font-family:'JetBrains Mono',monospace;
+          font-size:12px;
+          color:var(--parchment);
+          opacity:0.7;
+          border-top:1px solid rgba(247,242,230,0.18);
+          padding-top:14px;
+          margin-top:14px;
+        }
+        .register-line span:last-child{ color:var(--brass); opacity:1; }
+
+        /* ---------- RIGHT: form panel ---------- */
+        .panel-right{
+          flex:1 1 58%;
+          background:var(--white);
+          padding:56px 64px;
+          display:flex;
+          flex-direction:column;
+          justify-content:center;
+        }
+        .form-head h1{
+          font-family:'Fraunces',serif;
+          font-weight:500;
+          font-size:25px;
+          margin:0 0 6px;
+          color:var(--ink-navy);
+        }
+        .form-head p{
+          font-size:14px;
+          color:var(--text-muted);
+          margin:0 0 28px;
+        }
+
+        .role-tabs{
+          display:flex;
+          border:1px solid #E4E0D4;
+          border-radius:8px;
+          padding:3px;
+          margin-bottom:26px;
+          background:var(--parchment-dim);
+        }
+        .role-tab{
+          flex:1;
+          text-align:center;
+          font-size:13px;
+          font-weight:500;
+          padding:9px 4px;
+          border-radius:6px;
+          cursor:pointer;
+          color:var(--text-muted);
+          transition:background 0.15s, color 0.15s;
+          user-select:none;
+        }
+        .role-tab.active{
+          background:var(--ink-navy);
+          color:var(--white);
+        }
+        .role-tab:not(.active):hover{
+          color:var(--ink-navy);
+        }
+
+        form{ display:flex; flex-direction:column; gap:18px; }
+
+        .field label{
+          display:block;
+          font-size:12px;
+          font-weight:600;
+          letter-spacing:0.03em;
+          text-transform:uppercase;
+          color:var(--text-slate);
+          margin-bottom:7px;
+        }
+        .field-hint{
+          font-size:12px;
+          color:var(--text-muted);
+          margin-top:6px;
+        }
+        .input-wrap{
+          position:relative;
+          display:flex;
+          align-items:center;
+        }
+        .input-wrap input{
+          width:100%;
+          font-family:'JetBrains Mono',monospace;
+          font-size:14.5px;
+          color:var(--ink-navy);
+          background:var(--white);
+          border:1px solid #D8D3C4;
+          border-radius:8px;
+          padding:12px 14px;
+          outline:none;
+          transition:border-color 0.15s, box-shadow 0.15s;
+        }
+        .input-wrap input::placeholder{
+          font-family:'Inter',sans-serif;
+          color:#B7B2A2;
+        }
+        .input-wrap input:focus{
+          border-color:var(--brass-deep);
+          box-shadow:0 0 0 3px rgba(200,160,50,0.18);
+        }
+        .input-wrap input:focus-visible{
+          border-color:var(--brass-deep);
+          box-shadow:0 0 0 3px rgba(200,160,50,0.18);
+        }
+        .toggle-pw{
+          position:absolute;
+          right:10px;
+          background:none;
+          border:none;
+          font-family:'Inter',sans-serif;
+          font-size:12px;
+          font-weight:600;
+          color:var(--text-muted);
+          cursor:pointer;
+          padding:6px 8px;
+        }
+        .toggle-pw:hover{ color:var(--ink-navy); }
+        .toggle-pw:focus-visible{ outline:2px solid var(--brass-deep); border-radius:4px; }
+
+        .row-between{
+          display:flex;
+          align-items:center;
+          justify-content:space-between;
+          font-size:13px;
+        }
+        .remember{
+          display:flex;
+          align-items:center;
+          gap:8px;
+          color:var(--text-slate);
+        }
+        .remember input{ width:15px; height:15px; accent-color:var(--ink-navy); }
+        .row-between a{
+          color:var(--ink-navy-light);
+          text-decoration:none;
+          font-weight:500;
+        }
+        .row-between a:hover{ text-decoration:underline; }
+        .row-between a:focus-visible{ outline:2px solid var(--brass-deep); border-radius:3px; }
+
+        .submit{
+          margin-top:6px;
+          background:var(--ink-navy);
+          color:var(--white);
+          border:1px solid var(--ink-navy);
+          border-radius:8px;
+          padding:13px 0;
+          font-size:14.5px;
+          font-weight:600;
+          letter-spacing:0.01em;
+          cursor:pointer;
+          transition:background 0.15s, transform 0.05s;
+        }
+        .submit:hover{ background:var(--ink-navy-light); }
+        .submit:active{ transform:scale(0.99); }
+        .submit:focus-visible{ outline:3px solid rgba(200,160,50,0.45); outline-offset:2px; }
+
+        .status{
+          font-size:12.5px;
+          border-radius:7px;
+          padding:10px 12px;
+          display:none;
+          line-height:1.5;
+        }
+        .status.show{ display:block; }
+        .status.info{ background:#F1EEE3; color:var(--text-slate); border:1px solid #E0DACA; }
+        .status.error{ background:#FBEDED; color:var(--error); border:1px solid #EFD3D3; }
+
+        .helper{
+          margin-top:24px;
+          padding-top:18px;
+          border-top:1px solid #ECE7DA;
+          font-size:12.5px;
+          color:var(--text-muted);
+          text-align:center;
+        }
+        .helper a{ color:var(--ink-navy-light); font-weight:500; text-decoration:none; }
+        .helper a:hover{ text-decoration:underline; }
+
+        @@media (max-width:760px){
+          body{ padding:0; align-items:flex-start; }
+          .screen{ flex-direction:column; border-radius:0; min-height:100vh; }
+          .panel-left{ flex:0 0 auto; padding:32px 28px 28px 44px; background-size:100% 28px; }
+          .seal{ width:52px; height:52px; font-size:16px; }
+          .brand-name{ font-size:24px; }
+          .panel-left-spacer{ display:none; }
+          .register-line{ margin-top:18px; }
+          .panel-right{ padding:36px 28px 44px; }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="screen">
+        <section class="panel-left" aria-hidden="false">
+            <div class="seal" aria-hidden="true">GI</div>
+            <div class="brand">
+                <p class="brand-eyebrow">Greenfield ERP</p>
+                <h1 class="brand-name">Greenfield<br>International School</h1>
+                <p class="brand-sub">Every record, in order.</p>
+            </div>
+            <div class="panel-left-spacer"></div>
+            <div class="register-line">
+                <span id="session-line">Academic session</span>
+                <span id="today-line">—</span>
+            </div>
+        </section>
+
+        <section class="panel-right">
+            <div class="form-head">
+                <h1>Sign in to continue</h1>
+                <p>Choose your portal and enter your credentials.</p>
+            </div>
+
+            <div class="role-tabs" role="tablist" aria-label="Select portal">
+                <div class="role-tab active" role="tab" aria-selected="true" data-role="student" tabindex="0">Student</div>
+                <div class="role-tab" role="tab" aria-selected="false" data-role="teacher" tabindex="-1">Teacher</div>
+                <div class="role-tab" role="tab" aria-selected="false" data-role="staff" tabindex="-1">Staff</div>
+                <div class="role-tab" role="tab" aria-selected="false" data-role="admin" tabindex="-1">Admin</div>
+            </div>
+
+            <form id="login-form" novalidate>
+                <div class="field">
+                    <label for="user-id" id="id-label">Roll number</label>
+                    <div class="input-wrap">
+                        <input type="text" id="user-id" name="user-id" placeholder="GFS-2026-00231" autocomplete="username" required>
+                    </div>
+                    <p class="field-hint" id="id-hint">Printed on your admission card.</p>
+                </div>
+
+                <div class="field">
+                    <label for="password">Password</label>
+                    <div class="input-wrap">
+                        <input type="password" id="password" name="password" placeholder="Enter password" autocomplete="current-password" required>
+                        <button type="button" class="toggle-pw" id="toggle-pw" aria-label="Show password">Show</button>
+                    </div>
+                </div>
+
+                <div class="row-between">
+                    <label class="remember">
+                        <input type="checkbox" id="remember" name="remember">
+                        Keep me signed in
+                    </label>
+                    <a href="#" id="forgot-link">Forgot password?</a>
+                </div>
+
+                <div class="status" id="status" role="alert"></div>
+
+                <button type="submit" class="submit">Sign in</button>
+            </form>
+
+            <p class="helper">Need help? Contact the school's admin office, or <a href="#" id="support-link">view the help guide</a>.</p>
+        </section>
+    </main>
+
+    <script>
+        var roleConfig = {
+          student: { label: "Roll number", placeholder: "GFS-2026-00231", hint: "Printed on your admission card." },
+          teacher: { label: "Staff ID", placeholder: "GFS-T-0042", hint: "Issued by the school office." },
+          staff:   { label: "Employee ID", placeholder: "GFS-E-0117", hint: "Found on your staff ID card." },
+          admin:   { label: "Admin ID", placeholder: "GFS-A-001", hint: "Restricted to authorised admin accounts." }
+        };
+
+        var tabs = document.querySelectorAll(".role-tab");
+        var idLabel = document.getElementById("id-label");
+        var idInput = document.getElementById("user-id");
+        var idHint = document.getElementById("id-hint");
+
+        tabs.forEach(function(tab){
+          tab.addEventListener("click", function(){ activateTab(tab); });
+          tab.addEventListener("keydown", function(e){
+            if(e.key === "Enter" || e.key === " "){ e.preventDefault(); activateTab(tab); }
+          });
+        });
+
+        function activateTab(tab){
+          tabs.forEach(function(t){
+            t.classList.remove("active");
+            t.setAttribute("aria-selected","false");
+            t.setAttribute("tabindex","-1");
+          });
+          tab.classList.add("active");
+          tab.setAttribute("aria-selected","true");
+          tab.setAttribute("tabindex","0");
+          tab.focus();
+
+          var cfg = roleConfig[tab.dataset.role];
+          idLabel.textContent = cfg.label;
+          idInput.placeholder = cfg.placeholder;
+          idHint.textContent = cfg.hint;
+          idInput.value = "";
+          document.getElementById("status").classList.remove("show","error","info");
+        }
+
+        var pwInput = document.getElementById("password");
+        var toggleBtn = document.getElementById("toggle-pw");
+        toggleBtn.addEventListener("click", function(){
+          var hidden = pwInput.type === "password";
+          pwInput.type = hidden ? "text" : "password";
+          toggleBtn.textContent = hidden ? "Hide" : "Show";
+          toggleBtn.setAttribute("aria-label", hidden ? "Hide password" : "Show password");
+        });
+
+        var form = document.getElementById("login-form");
+        var status = document.getElementById("status");
+        form.addEventListener("submit", function(e){
+          e.preventDefault();
+          if(!idInput.value.trim() || !pwInput.value.trim()){
+            status.textContent = "Enter both your ID and password to continue.";
+            status.classList.remove("info");
+            status.classList.add("show","error");
+            return;
+          }
+          status.textContent = "This is a front-end template. Connect the form to your ERP backend to enable real sign-in.";
+          status.classList.remove("error");
+          status.classList.add("show","info");
+        });
+
+        document.getElementById("forgot-link").addEventListener("click", function(e){ e.preventDefault(); });
+        document.getElementById("support-link").addEventListener("click", function(e){ e.preventDefault(); });
+
+        var today = new Date();
+        var options = { day: "numeric", month: "long", year: "numeric" };
+        document.getElementById("today-line").textContent = today.toLocaleDateString("en-IN", options);
+
+        var startYear = today.getMonth() >= 3 ? today.getFullYear() : today.getFullYear() - 1;
+        document.getElementById("session-line").textContent = "Session " + startYear + "–" + String(startYear + 1).slice(-2);
+    </script>
+
+</body>
+</html>
+
