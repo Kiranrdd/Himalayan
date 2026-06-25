@@ -1,0 +1,127 @@
+﻿
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layoutall.cshtml";
+}
+
+<div class="content">
+
+    <section class="stats-row">
+        <div class="stat-card">
+            <div class="top-row">
+                <div class="icon-badge navy"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="6.5" r="3.2" /><path d="M3.5 17c0-3.3 2.9-5.5 6.5-5.5s6.5 2.2 6.5 5.5" /></svg></div>
+            </div>
+            <p class="label">Students enrolled</p>
+            <p class="value">1,240</p>
+            <p class="note">Across 18 classes</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="top-row">
+                <div class="icon-badge navy"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6.5" width="15" height="10" rx="1.4" /><path d="M7 6.5V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5" /></svg></div>
+            </div>
+            <p class="label">Staff on roll</p>
+            <p class="value">86</p>
+            <p class="note">64 teaching · 22 non-teaching</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="top-row">
+                <div class="icon-badge brass"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="15" height="11" rx="1.6" /><path d="M2.5 8h15" /></svg></div>
+                <span class="trend up">↑ 12%</span>
+            </div>
+            <p class="label">Fee collected — June</p>
+            <p class="value">₹18,42,300</p>
+            <p class="note">vs ₹16,45,900 in May</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="top-row">
+                <div class="icon-badge red"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5l7 12.5H3z" /><path d="M10 8.3v3.2M10 13.8v.1" /></svg></div>
+                <span class="trend down">142 students</span>
+            </div>
+            <p class="label">Fees pending</p>
+            <p class="value">₹4,86,750</p>
+            <p class="note">₹1,02,400 overdue 30+ days</p>
+        </div>
+    </section>
+
+    <section class="grid-main">
+        <div class="col">
+            <div class="card">
+                <div class="card-head">
+                    <h2>Fee collection trend</h2>
+                    <span class="meta">Last 6 months, in ₹ lakh</span>
+                </div>
+                <div class="chart-wrap"><canvas id="feeChart"></canvas></div>
+            </div>
+
+            <div class="card">
+                <div class="card-head">
+                    <h2>Pending dues by class</h2>
+                    <a href="#">View all</a>
+                </div>
+                <table class="fixed">
+                    <thead><tr><th style="width:18%">Class</th><th style="width:18%">Students</th><th class="num" style="width:24%">Amount due</th><th>Share of total</th></tr></thead>
+                    <tbody id="dues-body"></tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-head">
+                    <h2>Recent transactions</h2>
+                    <a href="#">View all invoices</a>
+                </div>
+                <table>
+                    <thead><tr><th>Student</th><th>Class</th><th>Invoice</th><th class="num">Amount</th><th>Date</th><th>Status</th></tr></thead>
+                    <tbody id="txn-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card medallion-card">
+                <div class="card-head" style="justify-content:center;">
+                    <h2>Monthly collection target</h2>
+                </div>
+                <div class="ring" id="ring" style="--pct:0">
+                    <div class="ring-inner">
+                        <span class="pct" id="ring-pct">0%</span>
+                        <span class="pct-label">collected</span>
+                    </div>
+                </div>
+                <p class="desc">₹18,42,300 of <b>₹23,60,000</b> target reached for June</p>
+            </div>
+
+            <div class="card">
+                <div class="card-head"><h2>Quick actions</h2></div>
+                <div class="actions-list">
+                    <button class="action-btn">
+                        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="14" height="14" rx="1.6" /><path d="M10 6.5v7M6.5 10h7" /></svg>
+                        Generate invoice
+                    </button>
+                    <button class="action-btn">
+                        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="15" height="10" rx="1.4" /><path d="M2.5 9h15" /></svg>
+                        Record payment
+                    </button>
+                    <button class="action-btn">
+                        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5c-2.5 0-4.3 2-4.3 4.7v2.3l-1.2 2.3h11l-1.2-2.3V8.2c0-2.7-1.8-4.7-4.3-4.7z" /></svg>
+                        Send fee reminder
+                    </button>
+                    <button class="action-btn">
+                        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16V9l7-5 7 5v7" /><path d="M8 16v-4h4v4" /></svg>
+                        Export fee report
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-head"><h2>Notices &amp; events</h2></div>
+                <div class="notice-list" id="notice-list"></div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+
