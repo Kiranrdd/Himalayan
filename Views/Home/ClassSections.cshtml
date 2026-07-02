@@ -1,0 +1,207 @@
+﻿
+@{
+    ViewData["Title"] = "ClassSections";
+    Layout = "~/Views/Shared/_Layoutall.cshtml";
+}
+<link href="~/css/customeallpage.css" rel="stylesheet" />
+
+<div class="card">
+    <div class="card-head">
+        <h2>Add class section</h2>
+        <span class="meta">Fields marked <span style="color:var(--red)">*</span> are required</span>
+    </div>
+
+    <form id="frm" novalidate>
+        <div class="form-grid">
+
+            <div class="field">
+                <label for="sel-class">Class <span class="req">*</span></label>
+                <select id="sel-class" required>
+                    <option value="" disabled selected>— Select class —</option>
+                    <option value="1">Nursery</option>
+                    <option value="2">KG</option>
+                    <option value="3">Class 1</option>
+                    <option value="4">Class 2</option>
+                    <option value="5">Class 3</option>
+                    <option value="6">Class 4</option>
+                    <option value="7">Class 5</option>
+                    <option value="8">Class 6</option>
+                    <option value="9">Class 7</option>
+                    <option value="10">Class 8</option>
+                    <option value="11">Class 9</option>
+                    <option value="12">Class 10</option>
+                    <option value="13">Class 11</option>
+                    <option value="14">Class 12</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="sel-section">Section <span class="req">*</span></label>
+                <select id="sel-section" required>
+                    <option value="" disabled selected>— Select section —</option>
+                    <option value="1">A</option>
+                    <option value="2">B</option>
+                    <option value="3">C</option>
+                    <option value="4">D</option>
+                    <option value="5">E</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="sel-year">Academic year <span class="req">*</span></label>
+                <select id="sel-year" required>
+                    <option value="" disabled selected>— Select year —</option>
+                    <option value="3">2022-23</option>
+                    <option value="5">2023-24</option>
+                    <option value="1">2024-25</option>
+                    <option value="2">2025-26</option>
+                    <option value="4">2026-27</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="sel-teacher">Class teacher</label>
+                <select id="sel-teacher">
+                    <option value="">— None (assign later) —</option>
+                    <option value="101">Anjali Sharma</option>
+                    <option value="102">Ramesh Verma</option>
+                    <option value="103">Priya Nair</option>
+                    <option value="104">Suresh Gupta</option>
+                    <option value="105">Neha Joshi</option>
+                </select>
+            </div>
+
+            <div class="field btn-field" style="grid-column:1/-1; justify-content:flex-start;">
+                <button type="submit" class="btn-save">Save</button>
+            </div>
+
+        </div>
+        <p class="hint">Each class + section + academic year combination must be unique.</p>
+        <div class="status" id="st" role="alert"></div>
+    </form>
+</div>
+
+<!-- TABLE -->
+<div class="card">
+    <div class="card-head">
+        <h2>All class sections</h2>
+        <span class="meta" id="cnt">5 records</span>
+    </div>
+    <div class="table-wrap">
+        <table id="tbl">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Class</th>
+                    <th>Section</th>
+                    <th>Academic year</th>
+                    <th>Class teacher</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tb"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    /* ── lookup maps (mirrors DB seed data) ── */
+    var classes = {
+      1:"Nursery", 2:"KG", 3:"Class 1", 4:"Class 2", 5:"Class 3",
+      6:"Class 4",  7:"Class 5", 8:"Class 6", 9:"Class 7", 10:"Class 8",
+      11:"Class 9", 12:"Class 10", 13:"Class 11", 14:"Class 12"
+    };
+    var sections  = { 1:"A", 2:"B", 3:"C", 4:"D", 5:"E" };
+    var years     = { 1:"2024-25", 2:"2025-26", 3:"2022-23", 4:"2026-27", 5:"2023-24" };
+    var teachers  = { 101:"Anjali Sharma", 102:"Ramesh Verma", 103:"Priya Nair", 104:"Suresh Gupta", 105:"Neha Joshi" };
+
+    var tb  = document.getElementById("tb");
+    var cnt = document.getElementById("cnt");
+    var nid = 6;
+
+    function recount(){ var n=tb.rows.length; cnt.textContent=n+" record"+(n!==1?"s":""); }
+
+    function addRow(r, anim){
+      var tr = document.createElement("tr");
+      if(anim) tr.style.background = "rgba(200,160,50,0.14)";
+
+      var teacherCell = r.teacherId
+        ? '<span class="td-badge">' + (teachers[r.teacherId]||"ID "+r.teacherId) + '</span>'
+        : '<span class="td-null">Not assigned</span>';
+
+      tr.innerHTML =
+        '<td class="td-id">' + r.id + '</td>' +
+        '<td class="td-main">' + (classes[r.classId]||"Class "+r.classId) + '</td>' +
+        '<td><span class="td-badge">' + (sections[r.sectionId]||r.sectionId) + '</span></td>' +
+        '<td class="td-sub">' + (years[r.yearId]||r.yearId) + '</td>' +
+        '<td>' + teacherCell + '</td>' +
+        '<td class="td-act">' +
+          '<button type="button" class="del-btn" title="Delete">' +
+            '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' +
+              '<polyline points="4 6 16 6"/><path d="M7 6V4h6v2"/><path d="M8 9v5M12 9v5"/>' +
+              '<rect x="4.5" y="6" width="11" height="10" rx="1.2"/>' +
+            '</svg>Delete' +
+          '</button>' +
+        '</td>';
+
+      tr.querySelector(".del-btn").onclick = function(){
+        tr.style.transition = "opacity .18s"; tr.style.opacity = "0";
+        setTimeout(function(){ tr.remove(); recount(); }, 200);
+      };
+
+      tb.insertBefore(tr, tb.firstChild);
+      if(anim) setTimeout(function(){ tr.style.transition="background .6s"; tr.style.background=""; }, 60);
+    }
+
+    /* seed — exact SQL INSERT rows */
+    [
+      { id:5, classId:5,  sectionId:1, yearId:1, teacherId:null },  // Class 10 A 2024-25
+      { id:4, classId:4,  sectionId:1, yearId:1, teacherId:null },  // Class 5 A 2024-25
+      { id:3, classId:3,  sectionId:1, yearId:1, teacherId:null },  // Class 1 A 2024-25
+      { id:2, classId:2,  sectionId:1, yearId:1, teacherId:null },  // KG A 2024-25
+      { id:1, classId:1,  sectionId:1, yearId:1, teacherId:null }   // Nursery A 2024-25
+    ].forEach(function(r){ addRow(r, false); });
+
+    /* ── form submit ── */
+    var frm = document.getElementById("frm");
+    var st  = document.getElementById("st");
+
+    frm.addEventListener("submit", function(e){
+      e.preventDefault();
+
+      var classId   = parseInt(document.getElementById("sel-class").value)   || 0;
+      var sectionId = parseInt(document.getElementById("sel-section").value) || 0;
+      var yearId    = parseInt(document.getElementById("sel-year").value)    || 0;
+      var teacherId = document.getElementById("sel-teacher").value || null;
+
+      if(!classId || !sectionId || !yearId){
+        st.textContent = "Please select Class, Section and Academic Year.";
+        st.className   = "status show error";
+        return;
+      }
+
+      /* duplicate check */
+      var rows = Array.from(tb.querySelectorAll("tr"));
+      var dup  = rows.some(function(tr){
+        var cells = tr.querySelectorAll("td");
+        return cells[1] && cells[1].textContent.trim() === (classes[classId]||"")
+            && cells[2] && cells[2].textContent.trim() === (sections[sectionId]||"")
+            && cells[3] && cells[3].textContent.trim() === (years[yearId]||"");
+      });
+
+      if(dup){
+        st.textContent = (classes[classId]||"") + " – Section " + (sections[sectionId]||"") + " (" + (years[yearId]||"") + ") already exists.";
+        st.className   = "status show error";
+        return;
+      }
+
+      addRow({ id:nid, classId:classId, sectionId:sectionId, yearId:yearId, teacherId:teacherId ? parseInt(teacherId) : null }, true);
+      nid++;
+      recount();
+
+      st.textContent = (classes[classId]||"") + " – Section " + (sections[sectionId]||"") + " saved successfully.";
+      st.className   = "status show success";
+      frm.reset();
+    });
+</script>
+

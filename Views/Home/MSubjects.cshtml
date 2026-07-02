@@ -1,0 +1,131 @@
+﻿
+@{
+    ViewData["Title"] = "MSubjects";
+    Layout = "~/Views/Shared/_Layoutall.cshtml";
+}
+
+<link href="~/css/customeallpage.css" rel="stylesheet" />
+
+<div class="card">
+    <div class="card-head">
+        <h2>Add subject</h2>
+        <span class="meta">Fields marked <span style="color:var(--red)">*</span> are required</span>
+    </div>
+
+    <form id="frm" novalidate>
+        <div class="form-row">
+            <input type="text" id="txt-name" placeholder="e.g. English" maxlength="100" autocomplete="off" required>
+            <input type="text" id="txt-code" placeholder="e.g. ENG101" maxlength="20" autocomplete="off">
+            <button type="submit" class="btn-save">Save</button>
+        </div>
+        <p class="hint">Subject name must be unique.</p>
+        <div class="status" id="st" role="alert"></div>
+    </form>
+</div>
+
+<!-- TABLE -->
+<div class="card">
+    <div class="card-head">
+        <h2>All subjects</h2>
+        <span class="meta" id="cnt">5 records</span>
+    </div>
+    <div class="table-wrap">
+        <table id="tbl">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Subject name</th>
+                    <th>Code</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tb"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    var tb  = document.getElementById("tb");
+    var cnt = document.getElementById("cnt");
+    var nid = 6;
+
+    function recount(){ var n=tb.rows.length; cnt.textContent=n+" record"+(n!==1?"s":""); }
+
+    function addRow(r, anim){
+      var tr = document.createElement("tr");
+      if(anim) tr.style.background = "rgba(200,160,50,0.14)";
+
+      var codeCell = r.subjectCode
+        ? '<span class="td-badge">' + r.subjectCode + '</span>'
+        : '<span class="td-null">Not set</span>';
+
+      tr.innerHTML =
+        '<td class="td-id">' + r.id + '</td>' +
+        '<td class="td-main">' + r.subjectName + '</td>' +
+        '<td>' + codeCell + '</td>' +
+        '<td class="td-act">' +
+          '<button type="button" class="del-btn" title="Delete">' +
+            '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' +
+              '<polyline points="4 6 16 6"/><path d="M7 6V4h6v2"/><path d="M8 9v5M12 9v5"/>' +
+              '<rect x="4.5" y="6" width="11" height="10" rx="1.2"/>' +
+            '</svg>Delete' +
+          '</button>' +
+        '</td>';
+
+      tr.querySelector(".del-btn").onclick = function(){
+        tr.style.transition = "opacity .18s"; tr.style.opacity = "0";
+        setTimeout(function(){ tr.remove(); recount(); }, 200);
+      };
+
+      tb.insertBefore(tr, tb.firstChild);
+      if(anim) setTimeout(function(){ tr.style.transition="background .6s"; tr.style.background=""; }, 60);
+    }
+
+    /* seed — exact SQL INSERT rows */
+    [
+      { id:5, subjectName:"Social Science", subjectCode:"SST101" },
+      { id:4, subjectName:"Science",        subjectCode:"SCI101" },
+      { id:3, subjectName:"Hindi",          subjectCode:"HIN101" },
+      { id:2, subjectName:"Mathematics",    subjectCode:"MATH101" },
+      { id:1, subjectName:"English",        subjectCode:"ENG101" }
+    ].forEach(function(r){ addRow(r, false); });
+
+    /* ── form submit ── */
+    var frm = document.getElementById("frm");
+    var st  = document.getElementById("st");
+
+    frm.addEventListener("submit", function(e){
+      e.preventDefault();
+
+      var name = document.getElementById("txt-name").value.trim();
+      var code = document.getElementById("txt-code").value.trim();
+
+      if(!name){
+        st.textContent = "Please enter a subject name.";
+        st.className   = "status show error";
+        return;
+      }
+
+      /* duplicate check */
+      var rows = Array.from(tb.querySelectorAll("tr"));
+      var dup  = rows.some(function(tr){
+        var cells = tr.querySelectorAll("td");
+        return cells[1] && cells[1].textContent.trim().toLowerCase() === name.toLowerCase();
+      });
+
+      if(dup){
+        st.textContent = '"' + name + '" already exists.';
+        st.className   = "status show error";
+        return;
+      }
+
+      addRow({ id:nid, subjectName:name, subjectCode: code || null }, true);
+      nid++;
+      recount();
+
+      st.textContent = '"' + name + '" saved successfully.';
+      st.className   = "status show success";
+      frm.reset();
+    });
+</script>
+

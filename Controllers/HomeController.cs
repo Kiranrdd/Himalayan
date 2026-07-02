@@ -29,6 +29,22 @@ namespace Himalayan.Controllers
         {
             return View();
         }
+        public IActionResult MSections()
+        {
+            return View();
+        }
+        public IActionResult ClassSections()
+        {
+            return View();
+        }
+        public IActionResult MSubjects()
+        {
+            return View();
+        }
+        public IActionResult StudentRegistration()
+        {
+            return View();
+        }
         public IActionResult Feeinvoice()
         {
             return View();

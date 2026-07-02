@@ -1,0 +1,334 @@
+﻿
+@{
+    ViewData["Title"] = "StudentRegistration";
+    Layout = "~/Views/Shared/_Layoutall.cshtml";
+}
+
+
+<div class="page-grid">
+
+    <!-- ADD STUDENT -->
+    <div class="card">
+        <div class="card-head">
+            <h2>Add student</h2>
+            <span class="meta">Fields marked <span class="req">*</span> are required</span>
+        </div>
+
+        <form id="frm" novalidate>
+
+            <div class="form-section">
+                <div class="form-section-title">Basic details</div>
+                <div class="form-grid">
+
+                    <div class="field">
+                        <label for="txt-adm">Admission no <span class="req">*</span></label>
+                        <div class="input-wrap">
+                            <input type="text" id="txt-adm" class="mono" placeholder="e.g. ADM1006" maxlength="50" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="txt-roll">Roll no</label>
+                        <div class="input-wrap">
+                            <input type="number" id="txt-roll" placeholder="e.g. 6" min="1">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="txt-fname">First name <span class="req">*</span></label>
+                        <div class="input-wrap">
+                            <input type="text" id="txt-fname" placeholder="e.g. Aarav" maxlength="100" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="txt-lname">Last name</label>
+                        <div class="input-wrap">
+                            <input type="text" id="txt-lname" placeholder="e.g. Sharma" maxlength="100">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="txt-dob">Date of birth <span class="req">*</span></label>
+                        <div class="input-wrap">
+                            <input type="date" id="txt-dob" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="sel-gender">Gender</label>
+                        <div class="input-wrap">
+                            <select id="sel-gender">
+                                <option value="" selected>— Select —</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="form-section-title">Parent / guardian</div>
+                <div class="form-grid">
+
+                    <div class="field">
+                        <label for="txt-father">Father's name</label>
+                        <div class="input-wrap">
+                            <input type="text" id="txt-father" placeholder="e.g. Rajesh Sharma" maxlength="150">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="txt-mother">Mother's name</label>
+                        <div class="input-wrap">
+                            <input type="text" id="txt-mother" placeholder="e.g. Priya Sharma" maxlength="150">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="txt-mobile">Mobile no</label>
+                        <div class="input-wrap">
+                            <input type="text" id="txt-mobile" class="mono" placeholder="e.g. 9876543210" maxlength="15">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="txt-altmobile">Alternate mobile</label>
+                        <div class="input-wrap">
+                            <input type="text" id="txt-altmobile" class="mono" placeholder="Optional" maxlength="15">
+                        </div>
+                    </div>
+
+                    <div class="field full">
+                        <label for="txt-address">Address</label>
+                        <div class="input-wrap">
+                            <textarea id="txt-address" placeholder="House no, street, area..." maxlength="500"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="txt-city">City</label>
+                        <div class="input-wrap">
+                            <input type="text" id="txt-city" placeholder="e.g. Delhi" maxlength="100">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="form-section-title">Admission details</div>
+                <div class="form-grid">
+
+                    <div class="field">
+                        <label for="txt-admdate">Admission date <span class="req">*</span></label>
+                        <div class="input-wrap">
+                            <input type="date" id="txt-admdate" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="sel-classsection">Class &amp; section <span class="req">*</span></label>
+                        <div class="input-wrap">
+                            <select id="sel-classsection" required>
+                                <option value="" disabled selected>— Select —</option>
+                                <option value="1">Nursery – A</option>
+                                <option value="2">KG – A</option>
+                                <option value="3">Class 1 – A</option>
+                                <option value="4">Class 2 – A</option>
+                                <option value="5">Class 3 – A</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="sel-year">Academic year <span class="req">*</span></label>
+                        <div class="input-wrap">
+                            <select id="sel-year" required>
+                                <option value="" disabled selected>— Select —</option>
+                                <option value="3">2022-23</option>
+                                <option value="5">2023-24</option>
+                                <option value="1">2024-25</option>
+                                <option value="2">2025-26</option>
+                                <option value="4">2026-27</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="field full">
+                        <div class="toggle-row">
+                            <input type="checkbox" id="chk-active" checked>
+                            <label for="chk-active">Active student</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save student</button>
+                <button type="reset" class="btn btn-secondary">Clear</button>
+            </div>
+
+            <p class="field-hint">Admission number must be unique.</p>
+            <div class="status" id="st" role="alert"></div>
+        </form>
+    </div>
+
+    <!-- STUDENT LIST -->
+    <div class="card">
+        <div class="card-head">
+            <h2>All students</h2>
+            <span class="meta" id="cnt">5 records</span>
+        </div>
+        <div class="table-scroll">
+            <table class="responsive-stack" id="tbl">
+                <thead>
+                    <tr>
+                        <th>Adm. no</th>
+                        <th>Roll</th>
+                        <th>Name</th>
+                        <th>DOB</th>
+                        <th>Gender</th>
+                        <th>Class – section</th>
+                        <th>Academic year</th>
+                        <th>Mobile</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="tb"></tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    /* ── lookup maps ── */
+    var classSections = {
+        1: "Nursery – A", 2: "KG – A", 3: "Class 1 – A", 4: "Class 2 – A", 5: "Class 3 – A"
+    };
+    var years = { 1: "2024-25", 2: "2025-26", 3: "2022-23", 4: "2026-27", 5: "2023-24" };
+
+    var tb  = document.getElementById("tb");
+    var cnt = document.getElementById("cnt");
+    var nid = 6;
+
+    function recount() {
+        var n = tb.rows.length;
+        cnt.textContent = n + " record" + (n !== 1 ? "s" : "");
+    }
+
+    function fmtDob(iso) {
+        var d = new Date(iso + "T00:00:00");
+        if (isNaN(d)) return iso;
+        return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+    }
+
+    function addRow(r, anim) {
+        var tr = document.createElement("tr");
+        if (anim) tr.style.background = "rgba(200,160,50,0.14)";
+
+        var mobileCell = r.mobileNo
+            ? '<span data-label="Mobile">' + r.mobileNo + '</span>'
+            : '<span data-label="Mobile" style="color:var(--text-muted);font-style:italic;">—</span>';
+
+        tr.innerHTML =
+            '<td data-label="Adm. no">' + r.admissionNo + '</td>' +
+            '<td data-label="Roll">' + (r.rollNo || '<span style="color:var(--text-muted);font-style:italic;">—</span>') + '</td>' +
+            '<td data-label="Name"><strong>' + r.firstName + (r.lastName ? " " + r.lastName : "") + '</strong></td>' +
+            '<td data-label="DOB">' + fmtDob(r.dob) + '</td>' +
+            '<td data-label="Gender">' + (r.gender || '<span style="color:var(--text-muted);font-style:italic;">—</span>') + '</td>' +
+            '<td data-label="Class – section">' + (classSections[r.classSectionId] || "—") + '</td>' +
+            '<td data-label="Academic year">' + (years[r.academicYearId] || "—") + '</td>' +
+            '<td data-label="Mobile">' + mobileCell + '</td>' +
+            '<td data-label="">' +
+                '<button type="button" class="btn-icon-del" title="Delete">' +
+                    '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' +
+                        '<polyline points="4 6 16 6"/><path d="M7 6V4h6v2"/><path d="M8 9v5M12 9v5"/>' +
+                        '<rect x="4.5" y="6" width="11" height="10" rx="1.2"/>' +
+                    '</svg>' +
+                '</button>' +
+            '</td>';
+
+        tr.querySelector(".btn-icon-del").onclick = function () {
+            tr.style.transition = "opacity .18s";
+            tr.style.opacity = "0";
+            setTimeout(function () { tr.remove(); recount(); }, 200);
+        };
+
+        tb.insertBefore(tr, tb.firstChild);
+        if (anim) setTimeout(function () { tr.style.transition = "background .6s"; tr.style.background = ""; }, 60);
+    }
+
+    /* seed — exact SQL INSERT rows */
+    [
+        { id: 5, admissionNo: "ADM1005", rollNo: 5, firstName: "Arjun",  lastName: "Kumar", dob: "2016-12-05", gender: "Male",   mobileNo: "9876543214", classSectionId: 5, academicYearId: 1 },
+        { id: 4, admissionNo: "ADM1004", rollNo: 4, firstName: "Diya",   lastName: "Verma", dob: "2018-08-25", gender: "Female", mobileNo: "9876543213", classSectionId: 4, academicYearId: 1 },
+        { id: 3, admissionNo: "ADM1003", rollNo: 3, firstName: "Vihaan", lastName: "Singh", dob: "2017-11-10", gender: "Male",   mobileNo: "9876543212", classSectionId: 3, academicYearId: 1 },
+        { id: 2, admissionNo: "ADM1002", rollNo: 2, firstName: "Ananya", lastName: "Gupta", dob: "2019-02-20", gender: "Female", mobileNo: "9876543211", classSectionId: 2, academicYearId: 1 },
+        { id: 1, admissionNo: "ADM1001", rollNo: 1, firstName: "Aarav",  lastName: "Sharma",dob: "2018-05-15", gender: "Male",   mobileNo: "9876543210", classSectionId: 1, academicYearId: 1 }
+    ].forEach(function (r) { addRow(r, false); });
+
+    /* ── form submit ── */
+    var frm = document.getElementById("frm");
+    var st  = document.getElementById("st");
+
+    frm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        var admissionNo    = document.getElementById("txt-adm").value.trim();
+        var rollNo          = parseInt(document.getElementById("txt-roll").value) || null;
+        var firstName        = document.getElementById("txt-fname").value.trim();
+        var lastName        = document.getElementById("txt-lname").value.trim();
+        var dob              = document.getElementById("txt-dob").value;
+        var gender          = document.getElementById("sel-gender").value;
+        var fatherName      = document.getElementById("txt-father").value.trim();
+        var motherName      = document.getElementById("txt-mother").value.trim();
+        var mobileNo        = document.getElementById("txt-mobile").value.trim();
+        var altMobile        = document.getElementById("txt-altmobile").value.trim();
+        var address          = document.getElementById("txt-address").value.trim();
+        var city              = document.getElementById("txt-city").value.trim();
+        var admissionDate  = document.getElementById("txt-admdate").value;
+        var classSectionId = parseInt(document.getElementById("sel-classsection").value) || 0;
+        var academicYearId = parseInt(document.getElementById("sel-year").value) || 0;
+        var isActive          = document.getElementById("chk-active").checked;
+
+        if (!admissionNo || !firstName || !dob || !admissionDate || !classSectionId || !academicYearId) {
+            st.textContent = "Please fill Admission No, First Name, Date of Birth, Admission Date, Class & Section and Academic Year.";
+            st.className   = "status show error";
+            return;
+        }
+
+        /* duplicate admission no check */
+        var rows = Array.from(tb.querySelectorAll("tr"));
+        var dup  = rows.some(function (tr) {
+            var first = tr.querySelector('td[data-label="Adm. no"]');
+            return first && first.textContent.trim().toLowerCase() === admissionNo.toLowerCase();
+        });
+
+        if (dup) {
+            st.textContent = 'Admission no "' + admissionNo + '" already exists.';
+            st.className   = "status show error";
+            return;
+        }
+
+        addRow({
+            id: nid, admissionNo: admissionNo, rollNo: rollNo, firstName: firstName, lastName: lastName,
+            dob: dob, gender: gender, fatherName: fatherName, motherName: motherName,
+            mobileNo: mobileNo, altMobile: altMobile, address: address, city: city,
+            admissionDate: admissionDate, classSectionId: classSectionId, academicYearId: academicYearId,
+            isActive: isActive
+        }, true);
+        nid++;
+        recount();
+
+        st.textContent = admissionNo + " – " + firstName + " " + lastName + " saved successfully.";
+        st.className   = "status show success";
+        frm.reset();
+        document.getElementById("chk-active").checked = true;
+    });
+</script>

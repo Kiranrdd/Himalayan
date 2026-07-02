@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewData["Title"] = "MSections";
+    Layout = "~/Views/Shared/_Layoutall.cshtml";
+}
+<link href="~/css/customeallpage.css" rel="stylesheet" />
+
+
+<!-- FORM -->
+<div class="card">
+    <div class="card-head">
+        <h2>Add section</h2>
+        <span class="meta">Max 10 chars</span>
+    </div>
+    <form id="frm" novalidate>
+        <div class="form-row">
+            <input type="text" id="inp" placeholder="e.g.  A" maxlength="10" autocomplete="off" required>
+            <button type="submit" class="btn-save">Save</button>
+        </div>
+        <p class="hint">Single letter or short name — A, B, C … or Science, Commerce etc.</p>
+        <div class="status" id="st" role="alert"></div>
+    </form>
+</div>
+
+<!-- TABLE -->
+<div class="card">
+    <div class="card-head">
+        <h2>All sections</h2>
+        <span class="meta" id="cnt">5 records</span>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Section name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tb"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    var tb = document.getElementById("tb");
+    var cnt = document.getElementById("cnt");
+    var nid = 6;
+
+    function recount(){ var n=tb.rows.length; cnt.textContent=n+" record"+(n!==1?"s":""); }
+
+    function addRow(r, anim){
+      var tr = document.createElement("tr");
+      if(anim) tr.style.background="rgba(200,160,50,0.14)";
+      tr.innerHTML=
+        '<td class="td-id">'+r.id+'</td>'+
+        '<td class="td-name">'+r.name+'</td>'+
+        '<td class="td-act">'+
+          '<button class="del-btn">'+
+            '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+
+              '<polyline points="4 6 16 6"/><path d="M7 6V4h6v2"/><path d="M8 9v5M12 9v5"/>'+
+              '<rect x="4.5" y="6" width="11" height="10" rx="1.2"/>'+
+            '</svg>Delete</button></td>';
+      tr.querySelector(".del-btn").onclick=function(){
+        tr.style.transition="opacity .18s"; tr.style.opacity="0";
+        setTimeout(function(){ tr.remove(); recount(); },200);
+      };
+      tb.insertBefore(tr,tb.firstChild);
+      if(anim) setTimeout(function(){ tr.style.transition="background .6s"; tr.style.background=""; },60);
+    }
+
+    [{id:5,name:"E"},{id:4,name:"D"},{id:3,name:"C"},{id:2,name:"B"},{id:1,name:"A"}]
+      .forEach(function(r){ addRow(r,false); });
+
+    var frm=document.getElementById("frm");
+    var inp=document.getElementById("inp");
+    var st =document.getElementById("st");
+
+    frm.addEventListener("submit",function(e){
+      e.preventDefault();
+      var v=inp.value.trim().toUpperCase();
+      if(!v){ st.textContent="Section name cannot be empty."; st.className="status show error"; return; }
+      var dup=Array.from(tb.querySelectorAll(".td-name")).map(function(x){return x.textContent.trim();});
+      if(dup.includes(v)){ st.textContent='"'+v+'" already exists.'; st.className="status show error"; return; }
+      addRow({id:nid,name:v},true); nid++; recount();
+      st.textContent='Section "'+v+'" saved.'; st.className="status show success";
+      frm.reset(); inp.focus();
+    });
+</script>

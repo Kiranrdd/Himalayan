@@ -1,0 +1,287 @@
+﻿/* ══════════════════ FORM GRID ══════════════════ */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px 14px;
+    align-items: end;
+}
+
+@media (max-width: 860px) {
+    .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.field label {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--slate, #4a5568);
+    margin-bottom: 5px;
+    letter-spacing: 0.01em;
+}
+
+.req {
+    color: var(--red, #c0392b);
+}
+
+.field.btn-field {
+    display: flex;
+    align-items: flex-end;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ══════════════════ INPUTS ══════════════════ */
+select {
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--navy, #152442);
+    background: var(--white, #ffffff);
+    border: 1px solid var(--border, #e2e5eb);
+    border-radius: 7px;
+    padding: 7px 10px;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.14s, box-shadow 0.14s;
+    appearance: auto;
+}
+
+    select:focus {
+        border-color: var(--brass-d, #c8a032);
+        box-shadow: 0 0 0 2.5px rgba(200, 160, 50, 0.18);
+    }
+
+input[type="text"] {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--navy, #152442);
+    background: var(--white, #ffffff);
+    border: 1px solid var(--border, #e2e5eb);
+    border-radius: 7px;
+    padding: 6px 10px;
+    width: 110px;
+    outline: none;
+    transition: border-color 0.14s, box-shadow 0.14s;
+}
+
+    input[type="text"]:focus {
+        border-color: var(--brass-d, #c8a032);
+        box-shadow: 0 0 0 2.5px rgba(200, 160, 50, 0.18);
+    }
+
+    input[type="text"]::placeholder {
+        font-family: 'Inter', sans-serif;
+        color: #C0BAA8;
+        font-size: 12px;
+    }
+
+/* ══════════════════ SAVE BUTTON ══════════════════ */
+.btn-save {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    padding: 7px 22px !important;
+    border-radius: 7px !important;
+    cursor: pointer !important;
+    background: var(--navy, #152442) !important;
+    color: #fff !important;
+    border: 1px solid var(--navy, #152442) !important;
+    transition: background 0.13s !important;
+    white-space: nowrap !important;
+    display: inline-block !important;
+    height: auto !important;
+    width: auto !important;
+    line-height: normal !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+}
+
+    .btn-save:hover {
+        background: var(--navy-l, #223762) !important;
+    }
+
+    .btn-save:focus-visible {
+        outline: 3px solid rgba(200, 160, 50, 0.4);
+        outline-offset: 2px;
+    }
+
+/* ══════════════════ HINT / STATUS ══════════════════ */
+.hint {
+    font-size: 11px;
+    color: var(--muted, #8a8f9c);
+    margin-top: 8px;
+}
+
+.status {
+    display: none;
+    margin-top: 12px;
+    font-size: 11.5px;
+    border-radius: 6px;
+    padding: 8px 12px;
+    line-height: 1.5;
+}
+
+    .status.show {
+        display: block;
+    }
+
+    .status.success {
+        background: var(--green-bg, #e9f7ef);
+        color: var(--green, #1e8e5a);
+        border: 1px solid var(--green-b, #b7e3cc);
+    }
+
+    .status.error {
+        background: var(--red-bg, #fdecea);
+        color: var(--red, #c0392b);
+        border: 1px solid var(--red-b, #f5c2bd);
+    }
+
+/* ══════════════════ TABLE ══════════════════ */
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+}
+
+th {
+    text-align: left;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted, #8a8f9c);
+    font-weight: 600;
+    padding: 0 10px 7px 0;
+    border-bottom: 1px solid var(--border, #e2e5eb);
+    background: none;
+    border-top: none;
+}
+
+td {
+    padding: 6px 10px 6px 0;
+    border-bottom: 1px solid var(--border, #e2e5eb);
+    vertical-align: middle;
+    line-height: 1.3;
+    background: none;
+    border-top: none;
+    color: var(--slate, #4a5568);
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+.td-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: var(--muted, #8a8f9c);
+    width: 52px;
+}
+
+.td-main {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy, #152442);
+}
+
+.td-sub {
+    font-size: 12px;
+    color: var(--slate, #4a5568);
+}
+
+.td-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--navy, #152442);
+    letter-spacing: 0.05em;
+}
+
+.td-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 20px;
+    display: inline-block;
+    background: rgba(21, 36, 66, 0.08);
+    color: var(--navy, #152442);
+}
+
+.td-null {
+    font-size: 11.5px;
+    color: var(--muted, #8a8f9c);
+    font-style: italic;
+}
+
+.td-act {
+    text-align: right;
+    width: 68px;
+    white-space: nowrap;
+}
+
+.del-btn {
+    background: none !important;
+    border: none !important;
+    cursor: pointer;
+    color: var(--muted, #8a8f9c) !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 6px !important;
+    border-radius: 5px !important;
+    transition: color 0.12s, background 0.12s;
+    line-height: normal !important;
+    height: auto !important;
+    width: auto !important;
+}
+
+    .del-btn:hover {
+        color: var(--red, #c0392b) !important;
+        background: var(--red-bg, #fdecea) !important;
+    }
+
+    .del-btn svg {
+        width: 11px;
+        height: 11px;
+    }
+.btn-icon-del {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: color .12s, background .12s;
+}
+
+    .btn-icon-del:hover {
+        color: var(--margin-red);
+        background: var(--red-bg);
+    }
+
+    .btn-icon-del svg {
+        width: 13px;
+        height: 13px;
+    }
